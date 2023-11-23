@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import Validation from '../../helpers/registerValidation';
-import axios from 'axios';
-import { Link, useNavigate  } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import axios from 'axios';
+import Validation from '../../helpers/registerValidation';
 
 const Register = () => {
-    const navigate = useNavigate();
 	const [values, setValues] = useState({
 		login: '',
 		fullName: '',
@@ -13,8 +12,8 @@ const Register = () => {
 		password: '',
 		passwordConfirmation: '',
 	});
-
 	const [errors, setErrors] = useState({});
+	const navigate = useNavigate();
 
 	const handleInput = (ev) => {
 		const { name, value } = ev.target;
@@ -31,10 +30,10 @@ const Register = () => {
 					'http://127.0.0.1:3050/api/auth/register',
 					values
 				);
-				console.log(res.data.token);
+				// console.log(res.data.token);
 				Cookies.set(res.data.token, { expires: 7, secure: true });
-				console.log(res);
-                navigate('/mainPage');
+				// console.log(res);
+				navigate('/mainPage');
 			} catch (err) {
 				console.log(err);
 			}
@@ -92,7 +91,7 @@ const Register = () => {
 						/>
 					</div>
 					<button type="submit">Sign up</button>
-					<Link to='/login'>Already have an account?</Link>
+					<Link to="/login">Already have an account?</Link>
 				</form>
 			</div>
 		</div>

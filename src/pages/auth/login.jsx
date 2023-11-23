@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import Validation from '../../helpers/registerValidation';
-import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import axios from 'axios';
+import React, { useState } from 'react';
+
+import Validation from '../../helpers/registerValidation';
 
 const Login = () => {
-    const navigate = useNavigate();
 	const [values, setValues] = useState({
 		login: '',
 		email: '',
 		password: '',
 	});
-
 	const [errors, setErrors] = useState({});
+	const navigate = useNavigate();
 
 	const handleInput = (ev) => {
 		const { name, value } = ev.target;
@@ -30,8 +30,8 @@ const Login = () => {
 					values
 				);
 				Cookies.set(res.data.token, { expires: 7, secure: true });
-				console.log(res);
-                navigate('/mainPage');
+				// console.log(res);
+				navigate('/mainPage');
 			} catch (err) {
 				console.log(err);
 			}
