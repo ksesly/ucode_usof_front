@@ -29,7 +29,7 @@ const Login = () => {
 					'http://127.0.0.1:3050/api/auth/login',
 					values
 				);
-				Cookies.set(res.data.token, { expires: 7, secure: true });
+				Cookies.set('token', `Bearer ${res.data.token}`, { expires: 7});
 				// console.log(res);
 				navigate('/mainPage');
 			} catch (err) {

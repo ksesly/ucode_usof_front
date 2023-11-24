@@ -15,7 +15,7 @@ export const UsofRoutes = () => {
 	return (
 		<Router>
 			<Routes>
-				<Route path="/" element={<Navigate to="/register" />} />
+				<Route path="/" element={<Navigate to="/mainPage" />} />
 				<Route path="/register" element={<Register />} />
 				<Route path="/login" element={<Login />} />
 				<Route path="/mainPage" element={<MainPage />} />
