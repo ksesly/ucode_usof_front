@@ -1,0 +1,11 @@
+.post {
+    width: 60%;
+    height: 150px;
+    border-radius: 5px;
+    background-color: aliceblue;
+    margin: 10px;
+    &:hover {
+        background-color: rgb(208, 208, 208);
+        border: 5px solid rgb(255, 19, 19);
+    }
+}

@@ -1,15 +1,46 @@
-import React from 'react';
-// import Post from '../post/Post';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import Post from '../globalComponents/Post';
 import Header from '../globalComponents/header';
-import  '../../style/mainPage.scss';
-import '../../style/global.scss'
+import '../../style/mainPage.scss';
+import '../../style/global.scss';
 
 const MainPage = () => {
-    return (
-        <div>
-            <Header />
-        </div>
-    )
-}
+	const [postData, setPostData] = useState({});
 
-export default MainPage
+	useEffect(() => {
+		const fetchPostData = async () => {
+			try {
+				const response = await axios.get(
+					'http://127.0.0.1:3050/api/posts'
+				);
+				setPostData(response.data);
+				console.log(postData);
+				/////
+				// if (postData.data) {
+				// 	postData.data.map((post) =>
+				// 		console.log(post)
+				// 	);
+				// }
+			} catch (error) {
+				console.error('Error fetching post data:', error);
+			}
+		};
+
+		fetchPostData();
+	}, []);
+
+	return (
+		<div className="mainPage">
+			<Header />
+
+			{postData.data
+				? postData.data.map((post) => (
+						<Post key={post.post_id} post_id={post.post_id} />
+				  ))
+				: null}
+		</div>
+	);
+};
+
+export default MainPage;

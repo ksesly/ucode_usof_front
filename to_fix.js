@@ -1,6 +1,9 @@
 //GLOBAL
 
 // 1 make the first page the mainPage 
+// 2 new posts - first
+// 3 avatar by id
+// click user - user page
 
 
 //AUTH
