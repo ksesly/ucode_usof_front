@@ -18,5 +18,25 @@
 //MAIN PAGE
 
 // 1 view all posts 
-// 2 navbar
-// ...
+// 2 navbar component
+// 3 line with avatar and login 
+// 4 posts columns
+// 5 create post component
+// 6 implement paggination
+// 7 style for posts
+// 8 style for navbar
+// 9 style for mainPage
+// 10 comments component
+// 11 filtering part
+// 12 sorting part
+// 13 sorting by category
+// 14 change activee or unactive post
+// 15 add to favorite button
+
+//User page
+
+// 1 view all users post
+// 2 view info about user
+// 3 page to change the users info
+
+
