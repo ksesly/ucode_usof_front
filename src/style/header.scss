@@ -1,28 +1,28 @@
 .header {
-    font-size: 20px;
-    height: 100px;
-    background-color: yellow;
-    width: 100%;
-    margin: 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    .logo {
-        margin-left: 5px;
-    }
-    .right-part-header {
-        display: flex;
-        width: 30%;
-        justify-content: space-between;
-        align-items: center;
-        margin-right: 5px;
-        .avatar-login {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            .header-login{
-                margin: 0 5px;
-            }
-        }
-    }
+	font-size: 20px;
+	height: 100px;
+	background-color: yellow;
+	width: 100%;
+	margin: 0;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	.logo {
+		margin-left: 5px;
+	}
+	.right-part-header {
+		display: flex;
+		width: 30%;
+		justify-content: space-between;
+		align-items: center;
+		margin-right: 5px;
+		.avatar-login {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			.header-login {
+				margin: 0 5px;
+			}
+		}
+	}
 }

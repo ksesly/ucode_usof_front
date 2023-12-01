@@ -33,7 +33,9 @@ function Post(post_id) {
 		};
 
 		fetchPostData();
-	}, [postData, post_id.post_id]);
+	}, [
+		// postData, post_id.post_id
+	]);
 
 	return (
 		<div className="post">

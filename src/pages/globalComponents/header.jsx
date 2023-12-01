@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../../style/header.scss';
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -6,6 +7,7 @@ import Avatar from '../globalComponents/avatar';
 
 const Header = () => {
 	const [userData, setUserData] = useState({});
+	const navigate = useNavigate();
 	useEffect(() => {
 		const fetchUserData = async () => {
 			try {
@@ -36,8 +38,20 @@ const Header = () => {
 		};
 
 		fetchUserData();
-	}, [userData]);
+	}, [
+		// userData
+	]);
 
+	const handleUserImage = async (ev) => {
+		ev.preventDefault();
+
+		if (!userData) {
+			
+		}
+		else {
+			navigate('/userPage');
+		}
+	};
 
 	return (
 		<div className="header">

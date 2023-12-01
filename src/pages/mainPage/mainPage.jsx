@@ -22,7 +22,9 @@ const MainPage = () => {
 		};
 
 		fetchPostData();
-	}, [postData]);
+	}, [
+		// postData
+	]);
 
 	return (
 		<div className="mainPage">
