@@ -21,7 +21,7 @@ const Header = () => {
 							},
 						}
 					);
-					
+
 					setUserData((prevUserData) => ({
 						...prevUserData,
 						...response.data,
@@ -36,27 +36,22 @@ const Header = () => {
 		};
 
 		fetchUserData();
-	}, []);
+	}, [userData]);
+
 
 	return (
 		<div className="header">
 			<div className="header-field logo">for name and camp photo</div>
 			<div className="right-part-header">
 				<div className="header-field search-bar">for find bar</div>
-				<div className="header-field">
-					{/* <div
-						className="header-field"
-						style={{
-							backgroundImage: `url(http://127.0.0.1:3050/${userData.profilePicture})`,
-							width: '50px',
-							height: '50px',
-							borderRadius: '50%',
-							display: 'block',
-							backgroundSize: 'cover',
-						}}
-					></div> */}
-					<Avatar />
-					{userData.login}
+				<div className="header-field avatar-login">
+					<div className="header-login">{userData.login}</div>
+					<div>
+						<Avatar
+							profilePicture={userData.profilePicture}
+							altText="User Avatar"
+						/>
+					</div>
 				</div>
 			</div>
 		</div>

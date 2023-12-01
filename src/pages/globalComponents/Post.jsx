@@ -33,12 +33,12 @@ function Post(post_id) {
 		};
 
 		fetchPostData();
-	}, []);
+	}, [postData, post_id.post_id]);
 
 	return (
 		<div className="post">
 			<div className="post-header">
-				<div className="post-avatar"></div>
+				<div className="post-author-avatar"></div>
 				<div className="post-author">{postData.author}</div>
 				<div className="post-creation-date">{postData.createdAt}</div>
 			</div>

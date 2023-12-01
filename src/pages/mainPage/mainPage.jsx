@@ -16,19 +16,13 @@ const MainPage = () => {
 				);
 				setPostData(response.data);
 				console.log(postData);
-				/////
-				// if (postData.data) {
-				// 	postData.data.map((post) =>
-				// 		console.log(post)
-				// 	);
-				// }
 			} catch (error) {
 				console.error('Error fetching post data:', error);
 			}
 		};
 
 		fetchPostData();
-	}, []);
+	}, [postData]);
 
 	return (
 		<div className="mainPage">

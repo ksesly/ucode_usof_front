@@ -2,8 +2,8 @@
 
 // 1 make the first page the mainPage 
 // 2 new posts - first
-// 3 avatar by id
-// click user - user page
+// 3 avatar by id DONE
+// 4 click user - user page
 
 
 //AUTH
@@ -20,9 +20,9 @@
 
 //MAIN PAGE
 
-// 1 view all posts 
+// 1 view all posts DONE
 // 2 navbar component
-// 3 line with avatar and login 
+// 3 line with avatar and login DONE
 // 4 posts columns
 // 5 create post component
 // 6 implement paggination
