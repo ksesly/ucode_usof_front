@@ -25,7 +25,7 @@
 // 3 line with avatar and login DONE
 // 4 posts columns
 // 5 create post component
-// 6 implement paggination
+// 6 implement paggination DONE
 // 7 style for posts
 // 8 style for navbar
 // 9 style for mainPage
@@ -38,7 +38,7 @@
 
 //User page
 
-// 1 view all users post
+// 1 view all users post DONE
 // 2 view info about user
 // 3 page to change the users info
 
