@@ -11,6 +11,7 @@ import Register from './pages/auth/register';
 import Login from './pages/auth/login';
 import MainPage from './pages/mainPage/mainPage';
 import UserPage from './pages/user/userPage';
+import NotAuthOrReg from './pages/globalComponents/notAuthOrReg';
 
 export const UsofRoutes = () => {
 	return (
@@ -20,7 +21,8 @@ export const UsofRoutes = () => {
 				<Route path="/register" element={<Register />} />
 				<Route path="/login" element={<Login />} />
 				<Route path="/mainPage" element={<MainPage />} />
-				<Route path="/userPage" element={<UserPage />} />
+				<Route path="/user/:user_id" element={<UserPage />} />
+				<Route path="/notAuthOrReg" element={<NotAuthOrReg />} />
 			</Routes>
 		</Router>
 	);

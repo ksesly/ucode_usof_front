@@ -7,6 +7,16 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	position: sticky;
+	top: 0;
+	z-index: 2;
+	transition: transform 0.3s;
+	&.scroll-down {
+		transform: translate3d(0, -100%, 0);
+	}
+	// &.scroll-up {
+	// 	transform: translate3d(0, 0, 0);;
+	// }
 	.logo {
 		margin-left: 5px;
 	}

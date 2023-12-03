@@ -1,51 +1,134 @@
 import '../../style/post.scss';
 import React, { useState, useEffect } from 'react';
+import HeaderForCurrentUser from '../globalComponents/headerForCurrentUser';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import Avatar from '../globalComponents/avatar';
+import Post from '../globalComponents/Post';
+import Cookies from 'js-cookie';
 
-function UserPage(post_id) {
-	// console.log(post_id);
-	// const [postData, setPostData] = useState({});
+function UserPage() {
+	const { user_id } = useParams();
+	const [userData, setUserData] = useState({});
+	const [postData, setPostData] = useState({});
+	const [currentPage, setCurrentPage] = useState(1);
 
-	// const getTime = (time) => {
-	// 	const dateString = '2023-11-24T22:17:03.000Z';
-	// 	const dateObject = new Date(dateString);
-	// 	const formattedDate = dateObject.toISOString().split('T')[0];
-	// 	return formattedDate;
-	// };
+	useEffect(() => {
+		const fetchUserData = async () => {
+			try {
+				const token = Cookies.get('token');
 
-	// useEffect(() => {
-	// 	const fetchPostData = async () => {
-	// 		try {
-	// 			const response = await axios.get(
-	// 				`http://127.0.0.1:3050/api/posts/${post_id.post_id}`,
-	// 				{}
-	// 			);
-	// 			response.data.createdAt = getTime(response.data.createdAt);
+				if (token) {
+					const response = await axios.get(
+						`http://127.0.0.1:3050/api/users/${user_id}`,
+						{
+							headers: {
+								Authorization: `Bearer%20${token}`,
+							},
+						}
+					);
 
-	// 			setPostData((prevPostData) => ({
-	// 				...prevPostData,
-	// 				...response.data,
-	// 			}));
-	// 			console.log('little post', postData);
-	// 		} catch (error) {
-	// 			console.error('Error fetching user data:', error);
-	// 		}
-	// 	};
+					setUserData((prevUserData) => ({
+						...prevUserData,
+						...response.data,
+					}));
+				} else {
+					console.log('Token does not exist');
+				}
+			} catch (error) {
+				console.error('Error fetching user data:', error);
+			}
+		};
 
-	// 	fetchPostData();
-	// }, [postData, post_id.post_id]);
+		fetchUserData();
+	}, [user_id]);
+
+	useEffect(() => {
+		const fetchPostData = async () => {
+			try {
+				const token = Cookies.get('token');
+
+				if (token) {
+					const response = await axios.get(
+						`http://127.0.0.1:3050/api/users/${user_id}/posts?page=${currentPage}`,
+						{
+							headers: {
+								Authorization: `Bearer%20${token}`,
+							},
+						}
+					);
+
+					setPostData((prevPostData) => ({
+						...prevPostData,
+						...response.data,
+					}));
+				} else {
+					console.log('Token does not exist');
+				}
+			} catch (error) {
+				console.error('Error fetching user data:', error);
+			}
+		};
+
+		fetchPostData();
+	}, [user_id, currentPage]);
+
+	const handlePageChange = (newPage) => {
+		setCurrentPage(newPage);
+	};
 
 	return (
 		<div className="user-page">
-			{/* <div className="post-header">
-				<div className="post-author-avatar"></div>
-				<div className="post-author">{postData.author}</div>
-				<div className="post-creation-date">{postData.createdAt}</div>
+			<HeaderForCurrentUser />
+			<div className="user-info-posts">
+				<div className="user-avatar-login">
+					<div className="user-avatar">
+						<Avatar
+							profilePicture={userData.profilePicture}
+							altText="User Avatar"
+						/>
+					</div>
+					<div className="user-login">{userData.login}</div>
+				</div>
+				<div className="post-block">
+					<div className="post-panel">
+						<div className="posts-tab"></div>
+						<div className="favoarite-tab"></div>
+					</div>
+					<div className="posts">
+						{postData.data
+							? postData.data.map((post) => (
+									<Post
+										key={post.post_id}
+										post_id={post.post_id}
+									/>
+							  ))
+							: null}
+					</div>
+					{postData.pagination && (
+						<div className="pagination">
+							{Array.from(
+								{ length: postData.pagination.totalPages },
+								(_, index) => (
+									<button
+										key={index + 1}
+										onClick={() =>
+											handlePageChange(index + 1)
+										}
+										className={
+											index + 1 === currentPage
+												? 'active'
+												: ''
+										}
+									>
+										{index + 1}
+									</button>
+								)
+							)}
+						</div>
+					)}
+				</div>
 			</div>
-			<div className="post-consistance">
-				<h1 className="post-title">{postData.title}</h1>
-				<div className="post-content">{postData.content}</div>
-			</div> */}
 		</div>
 	);
 }
