@@ -1,12 +1,13 @@
-import '../../style/post.scss';
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import Avatar from './avatar';
+import Comments from './comment';
 
 function Post({ post_id }) {
 	const [postData, setPostData] = useState({});
+	const [editablePostData, setEditablePostData] = useState({});
 	const [reactionData, setReactionData] = useState({});
 	const [reactionNumberData, setReactionNumberData] = useState({});
 	const [activeButton, setActiveButton] = useState(null);
@@ -14,41 +15,42 @@ function Post({ post_id }) {
 		like: 0,
 		dislike: 0,
 	});
+	const [editMode, setEditMode] = useState(false);
 	const tokenRef = useRef(null);
 	const navigate = useNavigate();
+	const location = useLocation();
+	const user = Cookies.get('user');
 
 	const getTime = (time) => {
-		const dateString = '2023-11-24T22:17:03.000Z';
-		const dateObject = new Date(dateString);
+		const dateObject = new Date(time);
 		const formattedDate = dateObject.toISOString().split('T')[0];
 		return formattedDate;
 	};
 
-	useEffect(
-		() => {
-			const fetchPostData = async () => {
-				try {
-					const response = await axios.get(
-						`http://127.0.0.1:3050/api/posts/${post_id}`,
-						{}
-					);
-					response.data.createdAt = getTime(response.data.createdAt);
+	useEffect(() => {
+		const fetchPostData = async () => {
+			try {
+				const response = await axios.get(
+					`http://127.0.0.1:3050/api/posts/${post_id}`,
+					{}
+				);
+				response.data.createdAt = getTime(response.data.createdAt);
 
-					setPostData((prevPostData) => ({
-						...prevPostData,
-						...response.data,
-					}));
-				} catch (error) {
-					console.error('Error fetching user data:', error);
-				}
-			};
+				setPostData((prevPostData) => ({
+					...prevPostData,
+					...response.data,
+				}));
+				setEditablePostData((prevPostData) => ({
+					...prevPostData,
+					...response.data,
+				}));
+			} catch (error) {
+				console.error('Error fetching user data:', error);
+			}
+		};
 
-			fetchPostData();
-		},
-		[
-			// 	// postData, post_id.post_id
-		]
-	);
+		fetchPostData();
+	}, []);
 
 	useEffect(() => {
 		const fetchReactionNumberData = async () => {
@@ -57,7 +59,6 @@ function Post({ post_id }) {
 					`http://127.0.0.1:3050/api/posts/${post_id}/like`
 				);
 
-				
 				let likeCount = 0;
 				let dislikeCount = 0;
 
@@ -69,7 +70,6 @@ function Post({ post_id }) {
 					}
 				});
 
-				
 				setReactionNumbers({
 					like: likeCount,
 					dislike: dislikeCount,
@@ -79,14 +79,15 @@ function Post({ post_id }) {
 			}
 		};
 
-		
 		fetchReactionNumberData();
 	}, [reactionData]);
 
 	const handleUserClick = (ev) => {
 		tokenRef.current = Cookies.get('token');
 		ev.preventDefault();
-		if (tokenRef.current) {
+		if (postData.author_id == user) {
+			navigate(`/user/me`);
+		} else if (tokenRef.current) {
 			navigate(`/user/${postData.author_id}`);
 		} else {
 			navigate('/notAuthOrReg');
@@ -155,10 +156,65 @@ function Post({ post_id }) {
 		}
 	};
 
+	const handleDeleteClick = async () => {
+		tokenRef.current = Cookies.get('token');
+		try {
+			if (tokenRef.current) {
+				const response = await axios.delete(
+					`http://127.0.0.1:3050/api/posts/${post_id}`,
+					{
+						headers: {
+							Authorization: `Bearer%20${tokenRef.current}`,
+						},
+					}
+				);
+				console.log(response);
+			}
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	const handleEditClick = () => {
+		setEditMode(true);
+	};
+
+	const handleSaveClick = async () => {
+		try {
+			tokenRef.current = Cookies.get('token');
+			const response = await axios.patch(
+				`http://127.0.0.1:3050/api/posts/${post_id}`,
+				editablePostData,
+				{
+					headers: {
+						Authorization: `Bearer%20${tokenRef.current}`,
+					},
+				}
+			);
+			console.log(response);
+			setEditMode(false);
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	const handleInputChange = (ev) => {
+		const { name, value } = ev.target;
+		setEditablePostData((prevData) => ({ ...prevData, [name]: value }));
+	};
+	const onPostClick = (ev) => {
+		ev.preventDefault();
+		navigate(`/posts/${postData.post_id}`);
+	};
+
+	const isOnMainPage = location.pathname.includes('mainPage');
+	const isOnUserPage = location.pathname.includes('user/me');
+	const isOnPostPage = location.pathname.includes('posts/');
+
 	return (
-		<div className="post">
+		<div className="post" onPostClick>
 			<div className="post-header">
-				<div className="post-author-avatar">
+				<div className="post-author-avatar" onClick={handleUserClick}>
 					<Avatar
 						profilePicture={postData.postAuthor?.profilePicture}
 						altText="User Avatar"
@@ -168,8 +224,30 @@ function Post({ post_id }) {
 				<div className="post-creation-date">{postData.createdAt}</div>
 			</div>
 			<div className="post-consistance">
-				<div className="post-title">{postData.title}</div>
-				<div className="post-content">{postData.content}</div>
+				<div className="post-title">
+					{editMode ? (
+						<input
+							type="text"
+							name="title"
+							value={editablePostData.title}
+							onChange={handleInputChange}
+						/>
+					) : (
+						postData.title
+					)}
+				</div>
+				<div className="post-content">
+					{editMode ? (
+						<input
+							type="text"
+							name="content"
+							value={editablePostData.content}
+							onChange={handleInputChange}
+						/>
+					) : (
+						postData.content
+					)}
+				</div>
 			</div>
 			<div className="rating">
 				<div className="like-amount">{reactionNumbers.like}</div>
@@ -187,6 +265,26 @@ function Post({ post_id }) {
 					onClick={() => handleReactionClick('dislike')}
 				></div>
 			</div>
+			{postData.author_id == user && !isOnMainPage && isOnUserPage ? (
+				<div className="delete-or-edit-post">
+					<div className="delete-post" onClick={handleDeleteClick}>
+						delete
+					</div>
+					{editMode ? (
+						<div className="save-post" onClick={handleSaveClick}>
+							save
+						</div>
+					) : (
+						<div className="edit-post" onClick={handleEditClick}>
+							edit
+						</div>
+					)}
+				</div>
+			) : null}
+			{!isOnMainPage && <Comments post_id={postData.post_id} />}
+			{!isOnPostPage ? (
+				<button onClick={onPostClick}>look post</button>
+			) : null}
 		</div>
 	);
 }

@@ -30,6 +30,7 @@ const Login = () => {
 					values
 				);
 				Cookies.set('token', `Bearer ${res.data.token}`, { expires: 7});
+				Cookies.set('user', `${res.data.data.user_id}`, { expires: 7 });
 				// console.log(res);
 				navigate('/mainPage');
 			} catch (err) {

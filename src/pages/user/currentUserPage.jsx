@@ -1,53 +1,52 @@
 import '../../style/post.scss';
 import React, { useState, useEffect } from 'react';
-import Header from '../globalComponents/header';
+import HeaderForCurrentUser from '../globalComponents/headerForCurrentUser';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Avatar from '../globalComponents/avatar';
 import Post from '../globalComponents/Post';
 import Cookies from 'js-cookie';
 
-function UserPage() {
-	const { user_id } = useParams();
+function CurrentUserPage() {
+	// const { user_id } = useParams();
 	const [userData, setUserData] = useState({});
 	const [postData, setPostData] = useState({});
 	const [currentPage, setCurrentPage] = useState(1);
 	const navigate = useNavigate();
 
-	useEffect(
-		() => {
-			const fetchUserData = async () => {
-				try {
-					const token = Cookies.get('token');
+	useEffect(() => {
+		const fetchUserData = async () => {
+			try {
+				const token = Cookies.get('token');
 
-					if (token) {
-						const response = await axios.get(
-							`http://127.0.0.1:3050/api/users/${user_id}`,
-							{
-								headers: {
-									Authorization: `Bearer%20${token}`,
-								},
-							}
-						);
+				if (token) {
+					const response = await axios.get(
+						`http://127.0.0.1:3050/api/users/currentUser`,
+						{
+							headers: {
+								Authorization: `Bearer%20${token}`,
+							},
+						}
+					);
 
-						setUserData((prevUserData) => ({
-							...prevUserData,
-							...response.data,
-						}));
-					} else {
-						console.log('Token does not exist');
-					}
-				} catch (error) {
-					console.error('Error fetching user data:', error);
+					setUserData((prevUserData) => ({
+						...prevUserData,
+						...response.data,
+					}));
+				} else {
+					console.log('Token does not exist');
 				}
-			};
+			} catch (error) {
+				console.error('Error fetching user data:', error);
+			}
+		};
 
-			fetchUserData();
-		},
-		[
-			// user_id
-		]
-	);
+		fetchUserData();
+	}, [
+        // user_id
+    ]);
+
+    console.log(userData)
 
 	useEffect(() => {
 		const fetchPostData = async () => {
@@ -56,7 +55,7 @@ function UserPage() {
 
 				if (token) {
 					const response = await axios.get(
-						`http://127.0.0.1:3050/api/users/${user_id}/posts?page=${currentPage}`,
+						`http://127.0.0.1:3050/api/users/${userData.user_id}/posts?page=${currentPage}`,
 						{
 							headers: {
 								Authorization: `Bearer%20${token}`,
@@ -77,15 +76,19 @@ function UserPage() {
 		};
 
 		fetchPostData();
-	}, [user_id, currentPage]);
+	}, [userData.user_id, currentPage]);
 
 	const handlePageChange = (newPage) => {
 		setCurrentPage(newPage);
 	};
+	
+	const handlePostAdding = () => {
+		navigate('/addPost');
+	}
 
 	return (
 		<div className="user-page">
-			<Header />
+			<HeaderForCurrentUser />
 			<div className="user-info-posts">
 				<div className="user-avatar-login">
 					<div className="user-avatar">
@@ -96,6 +99,9 @@ function UserPage() {
 					</div>
 					<div className="user-login">{userData.login}</div>
 				</div>
+				{/* <div className='add-post-button-div'> */}
+					<button className='add-post-button' onClick={handlePostAdding}>Add post</button>
+				{/* </div> */}
 				<div className="post-block">
 					<div className="post-panel">
 						<div className="posts-tab"></div>
@@ -139,4 +145,4 @@ function UserPage() {
 	);
 }
 
-export default UserPage;
+export default CurrentUserPage;

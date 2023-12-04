@@ -32,7 +32,8 @@ const Register = () => {
 				);
 				// console.log(res.data.token);
 				Cookies.set('token', `Bearer ${res.data.token}`, { expires: 7 });
-				// console.log(res);
+				Cookies.set('user', `${res.data.data.user_id}`, { expires: 7 });
+
 				navigate('/mainPage');
 			} catch (err) {
 				console.log(err);

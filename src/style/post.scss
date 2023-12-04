@@ -1,6 +1,6 @@
 .post {
 	width: 60%;
-	height: 180px;
+	height: fit-content;
 	border-radius: 5px;
 	background-color: aliceblue;
 	margin: 10px;
@@ -27,6 +27,27 @@
 			color: #2ebdd1;
 			transition: all 0.2s ease-in-out;
 			transform: scale(1.1);
+		}
+	}
+	.delete-or-edit-post {
+		display: flex;
+		.delete-post,
+		.edit-post {
+			// width: 10px;
+			// height: 10px;
+			background-color: blueviolet;
+			margin: 10px;
+			z-index: 60;
+		}
+		.edit-post {
+			background-color: brown;
+		}
+	}
+
+	.comments {
+		background-color:aquamarine;
+		.answer-block {
+			margin-left: 10px;
 		}
 	}
 }

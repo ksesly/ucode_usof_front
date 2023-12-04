@@ -73,15 +73,20 @@ const Header = () => {
 		ev.preventDefault();
 
 		if (tokenRef.current) {
-			navigate(`/user/${userData.user_id}`);
+			navigate(`/user/me`);
 		} else {
 			navigate('/notAuthOrReg');
 		}
 	};
 
+	const goToMainPage =  async (ev) => {
+		ev.preventDefault();
+		navigate(`/mainPage`);
+	}
+
 	return (
 		<div className={`header ${scrollDirection}`}>
-			<div className="header-field logo">for name and camp photo</div>
+			<div className="header-field logo" onClick={goToMainPage}>for name and camp photo</div>
 			<div className="right-part-header">
 				<div className="header-field search-bar">for find bar</div>
 				<div className="header-field avatar-login">
