@@ -27,6 +27,7 @@ const MainPage = () => {
 	const handlePageChange = (newPage) => {
 		setCurrentPage(newPage);
 	};
+	// console.log(postData);
 
 	return (
 		<div className="mainPage">
