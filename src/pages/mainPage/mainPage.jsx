@@ -46,6 +46,7 @@ const MainPage = () => {
 						{ length: postData.pagination.totalPages },
 						(_, index) => (
 							<button
+								id='page-button'
 								key={index + 1}
 								onClick={() => handlePageChange(index + 1)}
 								className={

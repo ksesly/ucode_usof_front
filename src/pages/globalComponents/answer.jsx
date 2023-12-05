@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import Avatar from './avatar';
+import '../../style/post.scss';
 
 function Answers({ comment_id }) {
 	const [answerData, setAnswerData] = useState([]);
@@ -39,8 +40,11 @@ function Answers({ comment_id }) {
 		<div className="answer-block">
 			{answerData
 				? answerData.map((answer, index) => (
-						<div className='answer-div' key={index}>{answer.content}</div>
-                ))
+						<div className="answer-div" key={index}>
+							<div className='answer-author-login'>{answer.author}</div>
+							<div className='answer-author-content'>{answer.content}</div>
+						</div>
+				  ))
 				: null}
 		</div>
 	);

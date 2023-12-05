@@ -1,4 +1,4 @@
-import '../../style/post.scss';
+import '../../style/userPage.scss';
 import React, { useState, useEffect } from 'react';
 import Header from '../globalComponents/header';
 import { useParams, useNavigate } from 'react-router-dom';

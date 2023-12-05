@@ -1,5 +1,17 @@
 @use 'global';
 
+@font-face {
+	font-family: 'WorkSans'; /* Give your font a name */
+	src: url('../assets/fonts/WorkSans-VariableFont_wght.ttf')
+		format('truetype'); /* Adjust the path to your font file */
+	font-weight: normal;
+	font-style: normal;
+}
+
+$color1: #fcca06;
+$color2: #4c4a4b;
+$color3: #008bf8;
+
 .mainPage {
 	width: 100%;
 	// height: 100%;
@@ -7,4 +19,35 @@
 	align-items: center;
 	flex-direction: column;
 	position: relative;
+	font-family: 'WorkSans', sans-serif;
+	.pagination {
+		display: flex;
+		justify-content: center;
+		margin-top: 20px;
+
+		#page-button {
+			background-color: $color2;
+			border: 2px solid $color2;
+			border-radius: 10px;
+			color: #ffffff;
+			padding: 8px 16px;
+			font-weight: 600;
+			margin: 0 5px;
+			cursor: pointer;
+			font-size: 16px;
+			transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+
+			&:hover {
+				background-color: #ffffff;
+				color: $color2;
+				border-color: #fcca06;
+			}
+
+			&.active {
+				background-color: white ;
+				color: $color2;
+				border-color: $color1;
+			}
+		}
+	}
 }

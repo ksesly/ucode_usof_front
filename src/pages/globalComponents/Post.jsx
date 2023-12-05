@@ -4,6 +4,11 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import Avatar from './avatar';
 import Comments from './comment';
+import Heart from '../../assets/icons/broken-heart.png';
+import BrokenHeart from '../../assets/icons/heart.png';
+import '../../style/post.scss';
+import BookMark from '../../assets/icons/bookmark.png';
+import RedBookMark from '../../assets/icons/bookmarkred.png';
 
 function Post({ post_id }) {
 	const [postData, setPostData] = useState({});
@@ -328,8 +333,8 @@ function Post({ post_id }) {
 						profilePicture={postData.postAuthor?.profilePicture}
 						altText="User Avatar"
 					/>
+					<div className="post-author">{postData.author}</div>
 				</div>
-				<div className="post-author">{postData.author}</div>
 				<div className="post-creation-date">{postData.createdAt}</div>
 			</div>
 			<div className="post-consistance">
@@ -367,14 +372,19 @@ function Post({ post_id }) {
 						activeButton === 'like' ? 'active' : ''
 					}`}
 					onClick={() => handleReactionClick('like')}
-				></div>
+				>
+					{' '}
+					<img src={BrokenHeart}></img>
+				</div>
 				<div className="dislike-amount">{reactionNumbers.dislike}</div>
 				<div
 					className={`dislike ${
 						activeButton === 'dislike' ? 'active' : ''
 					}`}
 					onClick={() => handleReactionClick('dislike')}
-				></div>
+				>
+					<img src={Heart}></img>
+				</div>
 			</div>
 			{postData.author_id == user && !isOnMainPage && isOnUserPage ? (
 				<div className="delete-or-edit-post">
@@ -401,11 +411,12 @@ function Post({ post_id }) {
 						value={content}
 						onChange={handleCommentInputChange}
 					/>
+					<span class="input-highlight"></span>
 					<button
 						className="add-comment-for-post-button"
 						onClick={handleAddComment}
 					>
-						add comment
+						send
 					</button>
 				</div>
 			) : null}
@@ -417,21 +428,27 @@ function Post({ post_id }) {
 					look post
 				</button>
 			) : null}
-			{isOnMainPage ||
-			(isOnPostPage && (!isOnFavoritePage || !isOnUserPage)) ? (
+			{tok && isOnPostPage ? (
 				!isFavorited ? (
-					<button className="add-to-fav-button" onClick={handleToggleFavorite}>
-						Fav
-					</button>
-				) : null
+					<img
+						className="add-to-fav-button"
+						onClick={handleToggleFavorite}
+						src={BookMark}
+					/>
+				) : (
+					<img
+						className="remove-from-fav-button"
+						onClick={handleRemoveFromFavorites}
+						src={RedBookMark}
+					/>
+				)
 			) : null}
-			{isOnFavoritePage ? (
-				<button
+			{isOnFavoritePage && tok ? (
+				<img
 					className="remove-from-fav-button"
 					onClick={handleRemoveFromFavorites}
-				>
-					Remove from favorites
-				</button>
+					src={RedBookMark}
+				/>
 			) : null}
 		</div>
 	);

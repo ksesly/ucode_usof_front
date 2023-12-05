@@ -1,4 +1,4 @@
-import '../../style/post.scss';
+import '../../style/userPage.scss';
 import React, { useState, useEffect } from 'react';
 import HeaderForCurrentUser from '../globalComponents/headerForCurrentUser';
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +8,6 @@ import Post from '../globalComponents/Post';
 import Cookies from 'js-cookie';
 
 function CurrentUserPage() {
-
 	const [userData, setUserData] = useState({});
 	const [postData, setPostData] = useState({});
 	const [currentPage, setCurrentPage] = useState(1);
@@ -100,14 +99,13 @@ function CurrentUserPage() {
 
 	const handleUploadAvatar = async () => {
 		try {
-			
 			const formData = new FormData();
 			formData.append('profilePicture', avatarFile);
 
 			const token = Cookies.get('token');
 
 			if (token) {
-				console.log('pipipi')
+				console.log('pipipi');
 				const response = await axios.patch(
 					`http://127.0.0.1:3050/api/users/avatar`,
 					formData,
@@ -144,29 +142,29 @@ function CurrentUserPage() {
 							profilePicture={userData.profilePicture}
 							altText="User Avatar"
 						/>
-						<input
-							type="file"
-							accept="image/*"
-							onChange={handleAvatarChange}
-						/>
-						<button onClick={handleUploadAvatar}>
-							Upload Avatar
-						</button>
+						<div className='div-for-avatar-upload'>
+							<input
+								type="file"
+								accept="image/*"
+								onChange={handleAvatarChange}
+							/>
+							<button onClick={handleUploadAvatar}>
+								Upload Avatar
+							</button>
+						</div>
 					</div>
-					<div className="user-login">{userData.login}</div>
-					<div className="user-login">{userData.fullName}</div>
+					<div>
+						<div className="user-login">{userData.login}</div>
+						<div className="user-login">{userData.fullName}</div>
+					</div>
 				</div>
-				<button onClick={handleEditUser}>edit user</button>
-				{/* <div className='add-post-button-div'> */}
+				<button className='edit-user-button' onClick={handleEditUser}>edit user</button>
+				
 				<button className="add-post-button" onClick={handlePostAdding}>
 					Add post
 				</button>
-				{/* </div> */}
+				
 				<div className="post-block">
-					<div className="post-panel">
-						<div className="posts-tab"></div>
-						<div className="favoarite-tab"></div>
-					</div>
 					<div className="posts">
 						{postData.data
 							? postData.data.map((post) => (
@@ -177,8 +175,8 @@ function CurrentUserPage() {
 							  ))
 							: null}
 					</div>
-					{postData.pagination && (
-						<div className="pagination">
+					{/* {postData.pagination && ( */}
+						{/* <div className="pagination">
 							{Array.from(
 								{ length: postData.pagination.totalPages },
 								(_, index) => (
@@ -197,8 +195,8 @@ function CurrentUserPage() {
 									</button>
 								)
 							)}
-						</div>
-					)}
+						</div> */}
+					{/* )} */}
 				</div>
 			</div>
 		</div>

@@ -1,0 +1,62 @@
+@use './global.scss';
+
+$color1: #fcca06;
+$color2: #4c4a4b;
+$color3: #008bf8;
+
+
+.user-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    .user-info-posts {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        width: 100%;
+        .user-avatar-login {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            .user-avatar{
+                
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                .div-for-avatar-upload{
+                    display: flex;
+                    flex-direction: column;
+                    
+                }
+                // width: 50px;
+                // height: 100px;
+            }
+        }
+        .add-post-button {
+
+        }
+        .edit-user-button{
+
+        }
+        .post-block {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            .posts{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                width: 100%;
+            }
+        }
+        
+    }
+}

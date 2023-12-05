@@ -125,19 +125,29 @@ const Header = () => {
 			<div className="header-field logo" onClick={goToMainPage}>
 				<img
 					className="campus-img"
-					src={
-						 `http://127.0.0.1:3050/static/avatars/campus.png`
-					}
+					src={`http://127.0.0.1:3050/static/avatars/campus.png`}
 					alt={'campus!'}
 				/>
-                <div className='name'>
-					<div>Innovation</div>
-					<div>Campswer</div></div>
+				<div className="name">Innovation Campswer</div>
 			</div>
-			<div className='menu-button-div'>
-				<button className='go-to-mainpage-button' onClick={goToMainPage}>Main Page</button>
-				{tok ? <button className='go-to-fav-button' onClick={handleFavClick}>fav</button> : null}
-				<button className='go-to-about-button' onClick={goToAboutPage}>About</button>
+			<div className="menu-button-div">
+				<button
+					className="go-to-mainpage-button"
+					onClick={goToMainPage}
+				>
+					Main Page
+				</button>
+				{tok ? (
+					<button
+						className="go-to-fav-button"
+						onClick={handleFavClick}
+					>
+						Favorite
+					</button>
+				) : null}
+				<button className="go-to-about-button" onClick={goToAboutPage}>
+					About
+				</button>
 			</div>
 			<div className="right-part-header">
 				<div className="header-field avatar-login">
@@ -151,9 +161,15 @@ const Header = () => {
 						/>
 					</div>
 					{tok ? (
-						<button className='logout-button' onClick={handleLogOut}>Log Out</button>
+						<button
+							className="logout-button"
+							onClick={handleLogOut}
+						>
+							Log Out
+						</button>
 					) : (
-						<button className='login-button'
+						<button
+							className="login-button"
 							onClick={() => {
 								navigate('/login');
 							}}

@@ -1,12 +1,21 @@
+@font-face {
+	font-family: 'WorkSans'; /* Give your font a name */
+	src: url('../assets/fonts/WorkSans-VariableFont_wght.ttf') format('truetype'); /* Adjust the path to your font file */
+	font-weight: normal;
+	font-style: normal;
+}
+
+
 $primary-color: #4c4a4b;
 
 body {
-    background-color: $primary-color;
-    margin: 0;
-    
-    height: 100vh;
+	background-color: $primary-color;
+	margin: 0;
+    font-family: 'WorkSans', sans-serif;
+	height: 100vh;
 }
 
 #root {
-    height: 100%;
+	height: 100%;
 }
+
