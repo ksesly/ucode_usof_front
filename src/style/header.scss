@@ -1,7 +1,18 @@
+$btn-width: 250px !default;
+$btn-height: 80px !default;
+$btn-full: $btn-height+$btn-width !default;
+$btn-half: $btn-full/2 !default;
+$bg-color: #eeeeee !default;
+
+@mixin size($width, $height) {
+	width: $width;
+	height: $height;
+}
+
 .header {
 	font-size: 20px;
 	height: 100px;
-	background-color: yellow;
+	background-color: #fcca06;
 	width: 100%;
 	margin: 0;
 	display: flex;
@@ -18,7 +29,57 @@
 	// 	transform: translate3d(0, 0, 0);;
 	// }
 	.logo {
+		display: flex;
+		justify-content: center;
+		align-items: center;
 		margin-left: 5px;
+		.campus-img {
+			width: 70px;
+			height: 70px;
+			margin-right: 10px;
+		}
+		.name {
+			font-size: 24px;
+		}
+	}
+	.menu-button-div {
+		display: flex;
+		
+		.go-to-mainpage-button, .go-to-fav-button, .go-to-about-button {
+			position: relative;
+			display: block;
+			overflow: hidden;
+			@include size(100%, $btn-height);
+			max-width: $btn-width;
+			margin: 1rem auto;
+			text-transform: uppercase;
+			border: 1px solid currentColor;
+						$btn-color: random-color($max:200);
+			$btn-color-dark: shade($btn-color, 40%);
+			color: tint($btn-color);
+			
+			&:before {
+				content: '';
+				@include absolute(0,-50px,0,0);
+				border-right: 50px solid transparent;
+				border-bottom: $btn-height solid $btn-color-dark;
+				transform: translateX(-100%);
+			}
+
+			&:hover {
+				color: tint($btn-color, 75%);
+
+				&:before {
+				transform: translateX(0);
+				}
+			}
+		}
+		.go-to-mainpage-button, .go-to-fav-button {
+			margin-right: 70px;
+		}
+		.go-to-mainpage-button {
+			margin-left: 70px;
+		}
 	}
 	.right-part-header {
 		display: flex;
@@ -33,6 +94,10 @@
 			.header-login {
 				margin: 0 5px;
 			}
+			.logout-button, .login-button {
+
+			}
+
 		}
 	}
 }

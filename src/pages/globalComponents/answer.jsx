@@ -39,7 +39,7 @@ function Answers({ comment_id }) {
 		<div className="answer-block">
 			{answerData
 				? answerData.map((answer, index) => (
-						<div key={index}> {answer.content}</div>
+						<div className='answer-div' key={index}>{answer.content}</div>
                 ))
 				: null}
 		</div>

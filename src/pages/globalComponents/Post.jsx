@@ -9,7 +9,6 @@ function Post({ post_id }) {
 	const [postData, setPostData] = useState({});
 	const [editablePostData, setEditablePostData] = useState({});
 	const [reactionData, setReactionData] = useState({});
-	const [reactionNumberData, setReactionNumberData] = useState({});
 	const [activeButton, setActiveButton] = useState(null);
 	const [reactionNumbers, setReactionNumbers] = useState({
 		like: 0,
@@ -22,7 +21,7 @@ function Post({ post_id }) {
 	const location = useLocation();
 	const user = Cookies.get('user');
 	const [content, setContent] = useState('');
-    const tok = Cookies.get('token');
+	const tok = Cookies.get('token');
 
 	const getTime = (time) => {
 		const dateObject = new Date(time);
@@ -320,7 +319,6 @@ function Post({ post_id }) {
 			console.error('Error removing post from favorites:', error);
 		}
 	};
-	
 
 	return (
 		<div className="post" onPostClick>
@@ -338,6 +336,7 @@ function Post({ post_id }) {
 				<div className="post-title">
 					{editMode ? (
 						<input
+							className="edit-post-input"
 							type="text"
 							name="title"
 							value={editablePostData.title}
@@ -350,6 +349,7 @@ function Post({ post_id }) {
 				<div className="post-content">
 					{editMode ? (
 						<input
+							className="edit-post-input"
 							type="text"
 							name="content"
 							value={editablePostData.content}
@@ -393,25 +393,43 @@ function Post({ post_id }) {
 				</div>
 			) : null}
 			{isOnPostPage ? (
-				<div>
+				<div className="add-comment-for-post-div">
 					<input
+						className="add-comment-for-post-input"
 						type="text"
 						placeholder="Type your comment"
 						value={content}
 						onChange={handleCommentInputChange}
 					/>
-					<button onClick={handleAddComment}>add comment</button>
+					<button
+						className="add-comment-for-post-button"
+						onClick={handleAddComment}
+					>
+						add comment
+					</button>
 				</div>
 			) : null}
 			{!isOnMainPage && !isOnFavoritePage && (
 				<Comments post_id={postData.post_id} />
 			)}
 			{!isOnPostPage && tok ? (
-				<button onClick={onPostClick}>look post</button>
+				<button className="look-post-button" onClick={onPostClick}>
+					look post
+				</button>
 			) : null}
-			
+			{isOnMainPage ||
+			(isOnPostPage && (!isOnFavoritePage || !isOnUserPage)) ? (
+				!isFavorited ? (
+					<button className="add-to-fav-button" onClick={handleToggleFavorite}>
+						Fav
+					</button>
+				) : null
+			) : null}
 			{isOnFavoritePage ? (
-				<button onClick={handleRemoveFromFavorites}>
+				<button
+					className="remove-from-fav-button"
+					onClick={handleRemoveFromFavorites}
+				>
 					Remove from favorites
 				</button>
 			) : null}

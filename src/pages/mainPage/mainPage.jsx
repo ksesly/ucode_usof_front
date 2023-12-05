@@ -4,12 +4,10 @@ import Post from '../globalComponents/Post';
 import Header from '../globalComponents/header';
 import '../../style/mainPage.scss';
 import '../../style/global.scss';
-import { useNavigate } from 'react-router-dom';
 
 const MainPage = () => {
 	const [postData, setPostData] = useState({});
 	const [currentPage, setCurrentPage] = useState(1);
-	const navigate = useNavigate();
 
 	useEffect(() => {
 		const fetchPostData = async () => {

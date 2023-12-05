@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import axios from 'axios';
-import Avatar from './avatar';
 import Answers from './answer';
 
 function Comments({ post_id }) {
@@ -35,13 +33,15 @@ function Comments({ post_id }) {
 
 	console.log(commentData);
 
-	const handleAddAnswer = async (e) => {
+	const handleAddAnswer = async (commentId) => {
+		console.log(answerText)
 		try {
 			tokenRef.current = Cookies.get('token');
 
 			if (tokenRef.current && answerText.trim() !== '') {
+				
 				const response = await axios.post(
-					`http://127.0.0.1:3050/api/comments/${commentData.comment_id}/answer`,
+					`http://127.0.0.1:3050/api/comments/${commentId}/answer`,
 					{
 						content: answerText,
 					},
@@ -51,7 +51,10 @@ function Comments({ post_id }) {
 						},
 					}
 				);
+
+				
 				setAnswerText('');
+				
 				setReplyingCommentId(null);
 			} else {
 				console.log('Unauthorized or empty answer text');
@@ -72,25 +75,31 @@ function Comments({ post_id }) {
 	return (
 		<div className="comments">
 			{commentData.map((comment, index) => (
-				<div key={index}>
-					{comment.content}
+				<div className='comment-answer-div' key={index}>
+					<div className='comment-div'>{comment.content}</div>
 					<Answers comment_id={comment.comment_id} />
-					<div>
+					<div className='answer-form'>
 						{replyingCommentId === comment.comment_id ? (
-							<form
-								onSubmit={handleAddAnswer}
-							>
-								<input
+							<>
+								<input className='input-for-answer'
 									type="text"
 									placeholder="Type your answer"
 									value={answerText}
 									onChange={handleAnswerInputChange}
 								/>
-								<button type="submit">send</button>
-							</form>
+								<button className='button-for-answer'
+									onClick={() =>
+										handleAddAnswer(comment.comment_id)
+									}
+								>
+									send
+								</button>
+							</>
 						) : (
-							<button
-								onClick={() => window.location.reload()}
+							<button className='button-to-send-answer'
+								onClick={() =>
+									handleReplyButtonClick(comment.comment_id)
+								}
 							>
 								Reply
 							</button>

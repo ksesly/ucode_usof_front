@@ -18,7 +18,8 @@
 // 8 handle all errors login
 // 9 handle all errors register
 
-//MAIN PAGE
+//MAIN PAGE #4c4a4b  rgba(76,74,75,255)   
+// #fcca06 rgba(252,202,6,255)
 
 // 1 view all posts DONE
 // 2 navbar component

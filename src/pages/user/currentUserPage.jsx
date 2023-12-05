@@ -1,14 +1,14 @@
 import '../../style/post.scss';
 import React, { useState, useEffect } from 'react';
 import HeaderForCurrentUser from '../globalComponents/headerForCurrentUser';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Avatar from '../globalComponents/avatar';
 import Post from '../globalComponents/Post';
 import Cookies from 'js-cookie';
 
 function CurrentUserPage() {
-	// const { user_id } = useParams();
+
 	const [userData, setUserData] = useState({});
 	const [postData, setPostData] = useState({});
 	const [currentPage, setCurrentPage] = useState(1);
