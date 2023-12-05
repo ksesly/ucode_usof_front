@@ -15,6 +15,8 @@ import UserPage from './pages/user/userPage';
 import NotAuthOrReg from './pages/globalComponents/notAuthOrReg';
 import AddPost from './pages/globalComponents/addPost';
 import PostPage from './pages/post/postPage';
+import Favorite from './pages/globalComponents/favorites';
+import EditUserPage from './pages/user/editUser';
 
 export const UsofRoutes = () => {
 	return (
@@ -29,6 +31,8 @@ export const UsofRoutes = () => {
 				<Route path="/notAuthOrReg" element={<NotAuthOrReg />} />
 				<Route path="/addPost" element={<AddPost />} />
 				<Route path="/posts/:post_id" element={<PostPage />} />
+				<Route path="/favorites" element={<Favorite />} />
+				<Route path="/edit" element={<EditUserPage />} />
 			</Routes>
 		</Router>
 	);

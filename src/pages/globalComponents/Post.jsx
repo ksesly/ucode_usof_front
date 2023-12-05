@@ -16,10 +16,12 @@ function Post({ post_id }) {
 		dislike: 0,
 	});
 	const [editMode, setEditMode] = useState(false);
+	const [isFavorited, setIsFavorited] = useState(false); // Новое состояние для отслеживания, добавлен ли пост в избранное
 	const tokenRef = useRef(null);
 	const navigate = useNavigate();
 	const location = useLocation();
 	const user = Cookies.get('user');
+	const [content, setContent] = useState('');
 
 	const getTime = (time) => {
 		const dateObject = new Date(time);
@@ -81,6 +83,31 @@ function Post({ post_id }) {
 
 		fetchReactionNumberData();
 	}, [reactionData]);
+
+	useEffect(() => {
+		const checkFavoriteStatus = async () => {
+			try {
+				tokenRef.current = Cookies.get('token');
+
+				if (tokenRef.current) {
+					const response = await axios.get(
+						`http://127.0.0.1:3000/api/favorites/${post_id}`,
+						{
+							headers: {
+								Authorization: `Bearer%20${tokenRef.current}`,
+							},
+						}
+					);
+
+					setIsFavorited(response.data.isFavorited);
+				}
+			} catch (error) {
+				console.error('Error checking favorite status:', error);
+			}
+		};
+
+		checkFavoriteStatus();
+	}, [post_id]);
 
 	const handleUserClick = (ev) => {
 		tokenRef.current = Cookies.get('token');
@@ -202,6 +229,7 @@ function Post({ post_id }) {
 		const { name, value } = ev.target;
 		setEditablePostData((prevData) => ({ ...prevData, [name]: value }));
 	};
+
 	const onPostClick = (ev) => {
 		ev.preventDefault();
 		navigate(`/posts/${postData.post_id}`);
@@ -210,6 +238,88 @@ function Post({ post_id }) {
 	const isOnMainPage = location.pathname.includes('mainPage');
 	const isOnUserPage = location.pathname.includes('user/me');
 	const isOnPostPage = location.pathname.includes('posts/');
+	const isOnFavoritePage = location.pathname.includes('favorite');
+
+	const handleAddComment = async () => {
+		try {
+			tokenRef.current = Cookies.get('token');
+
+			if (tokenRef.current && content.trim() !== '') {
+				const response = await axios.post(
+					`http://127.0.0.1:3050/api/posts/${post_id}/comments`,
+					{
+						content: content,
+					},
+					{
+						headers: {
+							Authorization: `Bearer%20${tokenRef.current}`,
+						},
+					}
+				);
+				setContent('');
+			} else {
+				console.log('Unauthorized or empty comment text');
+			}
+		} catch (error) {
+			console.error('Error adding comment:', error);
+		}
+	};
+
+	const handleCommentInputChange = (ev) => {
+		setContent(ev.target.value);
+	};
+
+	const handleToggleFavorite = async () => {
+		try {
+			tokenRef.current = Cookies.get('token');
+
+			if (tokenRef.current) {
+				if (isFavorited) {
+					const response = await axios.delete(
+						`http://127.0.0.1:3050/api/favorites/${post_id}`,
+						{
+							headers: {
+								Authorization: `Bearer%20${tokenRef.current}`,
+							},
+						}
+					);
+				} else {
+					const response = await axios.post(
+						`http://127.0.0.1:3050/api/favorites/${post_id}`,
+						{},
+						{
+							headers: {
+								Authorization: `Bearer%20${tokenRef.current}`,
+							},
+						}
+					);
+				}
+				setIsFavorited(!isFavorited);
+			}
+		} catch (error) {
+			console.error('Error toggling favorite status:', error);
+		}
+	};
+
+	const handleRemoveFromFavorites = async () => {
+		try {
+			tokenRef.current = Cookies.get('token');
+			if (tokenRef.current) {
+				const response = await axios.delete(
+					`http://127.0.0.1:3050/api/favorites/${post_id}`,
+					{
+						headers: {
+							Authorization: `Bearer%20${tokenRef.current}`,
+						},
+					}
+				);
+				setIsFavorited(false);
+			}
+		} catch (error) {
+			console.error('Error removing post from favorites:', error);
+		}
+	};
+	
 
 	return (
 		<div className="post" onPostClick>
@@ -281,9 +391,32 @@ function Post({ post_id }) {
 					)}
 				</div>
 			) : null}
-			{!isOnMainPage && <Comments post_id={postData.post_id} />}
+			{isOnPostPage ? (
+				<div>
+					<input
+						type="text"
+						placeholder="Type your comment"
+						value={content}
+						onChange={handleCommentInputChange}
+					/>
+					<button onClick={handleAddComment}>add comment</button>
+				</div>
+			) : null}
+			{!isOnMainPage && !isOnFavoritePage && (
+				<Comments post_id={postData.post_id} />
+			)}
 			{!isOnPostPage ? (
 				<button onClick={onPostClick}>look post</button>
+			) : null}
+			{isOnMainPage ||
+			isOnPostPage ||
+			(!isOnFavoritePage && !isOnUserPage) ? (
+				<button onClick={handleToggleFavorite}>Fav</button>
+			) : null}
+			{isOnFavoritePage ? (
+				<button onClick={handleRemoveFromFavorites}>
+					Remove from favorites
+				</button>
 			) : null}
 		</div>
 	);

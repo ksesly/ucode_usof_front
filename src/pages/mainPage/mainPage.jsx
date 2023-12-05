@@ -4,10 +4,12 @@ import Post from '../globalComponents/Post';
 import Header from '../globalComponents/header';
 import '../../style/mainPage.scss';
 import '../../style/global.scss';
+import { useNavigate } from 'react-router-dom';
 
 const MainPage = () => {
 	const [postData, setPostData] = useState({});
 	const [currentPage, setCurrentPage] = useState(1);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const fetchPostData = async () => {
@@ -28,11 +30,14 @@ const MainPage = () => {
 		setCurrentPage(newPage);
 	};
 	// console.log(postData);
+	const handleFavClick = () => {
+		navigate('/favorites')
+	}
 
 	return (
 		<div className="mainPage">
 			<Header />
-
+			<button onClick={handleFavClick}>fav</button>
 			{postData.data
 				? postData.data.map((post) => (
 						<Post key={post.post_id} post_id={post.post_id} />

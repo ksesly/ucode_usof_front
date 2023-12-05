@@ -13,40 +13,44 @@ function CurrentUserPage() {
 	const [postData, setPostData] = useState({});
 	const [currentPage, setCurrentPage] = useState(1);
 	const navigate = useNavigate();
+	const [avatarFile, setAvatarFile] = useState(null);
 
-	useEffect(() => {
-		const fetchUserData = async () => {
-			try {
-				const token = Cookies.get('token');
+	useEffect(
+		() => {
+			const fetchUserData = async () => {
+				try {
+					const token = Cookies.get('token');
 
-				if (token) {
-					const response = await axios.get(
-						`http://127.0.0.1:3050/api/users/currentUser`,
-						{
-							headers: {
-								Authorization: `Bearer%20${token}`,
-							},
-						}
-					);
+					if (token) {
+						const response = await axios.get(
+							`http://127.0.0.1:3050/api/users/currentUser`,
+							{
+								headers: {
+									Authorization: `Bearer%20${token}`,
+								},
+							}
+						);
 
-					setUserData((prevUserData) => ({
-						...prevUserData,
-						...response.data,
-					}));
-				} else {
-					console.log('Token does not exist');
+						setUserData((prevUserData) => ({
+							...prevUserData,
+							...response.data,
+						}));
+					} else {
+						console.log('Token does not exist');
+					}
+				} catch (error) {
+					console.error('Error fetching user data:', error);
 				}
-			} catch (error) {
-				console.error('Error fetching user data:', error);
-			}
-		};
+			};
 
-		fetchUserData();
-	}, [
-        // user_id
-    ]);
+			fetchUserData();
+		},
+		[
+			// userData
+		]
+	);
 
-    console.log(userData)
+	console.log(userData);
 
 	useEffect(() => {
 		const fetchPostData = async () => {
@@ -81,11 +85,55 @@ function CurrentUserPage() {
 	const handlePageChange = (newPage) => {
 		setCurrentPage(newPage);
 	};
-	
+
 	const handlePostAdding = () => {
 		navigate('/addPost');
-	}
+	};
+	const handleEditUser = () => {
+		navigate('/edit');
+	};
 
+	const handleAvatarChange = (event) => {
+		const file = event.target.files[0];
+		setAvatarFile(file);
+	};
+
+	const handleUploadAvatar = async () => {
+		try {
+			
+			const formData = new FormData();
+			formData.append('profilePicture', avatarFile);
+
+			const token = Cookies.get('token');
+
+			if (token) {
+				console.log('pipipi')
+				const response = await axios.patch(
+					`http://127.0.0.1:3050/api/users/avatar`,
+					formData,
+					{
+						headers: {
+							Authorization: `Bearer%20${token}`,
+							'Content-Type': 'multipart/form-data',
+						},
+					}
+				);
+
+				console.log(response.data);
+				// Обновите состояние с новыми данными о пользователе, включая новый аватар
+				setUserData((prevUserData) => ({
+					...prevUserData,
+					...response.data,
+				}));
+			} else {
+				console.log('Token does not exist');
+			}
+		} catch (error) {
+			console.error('Error uploading avatar:', error);
+		}
+	};
+
+	console.log(userData);
 	return (
 		<div className="user-page">
 			<HeaderForCurrentUser />
@@ -96,11 +144,23 @@ function CurrentUserPage() {
 							profilePicture={userData.profilePicture}
 							altText="User Avatar"
 						/>
+						<input
+							type="file"
+							accept="image/*"
+							onChange={handleAvatarChange}
+						/>
+						<button onClick={handleUploadAvatar}>
+							Upload Avatar
+						</button>
 					</div>
 					<div className="user-login">{userData.login}</div>
+					<div className="user-login">{userData.fullName}</div>
 				</div>
+				<button onClick={handleEditUser}>edit user</button>
 				{/* <div className='add-post-button-div'> */}
-					<button className='add-post-button' onClick={handlePostAdding}>Add post</button>
+				<button className="add-post-button" onClick={handlePostAdding}>
+					Add post
+				</button>
 				{/* </div> */}
 				<div className="post-block">
 					<div className="post-panel">
