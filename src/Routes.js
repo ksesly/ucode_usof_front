@@ -17,6 +17,7 @@ import AddPost from './pages/globalComponents/addPost';
 import PostPage from './pages/post/postPage';
 import Favorite from './pages/globalComponents/favorites';
 import EditUserPage from './pages/user/editUser';
+import About from './pages/about/about';
 
 export const UsofRoutes = () => {
 	return (
@@ -33,6 +34,7 @@ export const UsofRoutes = () => {
 				<Route path="/posts/:post_id" element={<PostPage />} />
 				<Route path="/favorites" element={<Favorite />} />
 				<Route path="/edit" element={<EditUserPage />} />
+				<Route path="/about" element={<About />} />
 			</Routes>
 		</Router>
 	);

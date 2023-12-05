@@ -16,12 +16,13 @@ function Post({ post_id }) {
 		dislike: 0,
 	});
 	const [editMode, setEditMode] = useState(false);
-	const [isFavorited, setIsFavorited] = useState(false); // Новое состояние для отслеживания, добавлен ли пост в избранное
+	const [isFavorited, setIsFavorited] = useState(false);
 	const tokenRef = useRef(null);
 	const navigate = useNavigate();
 	const location = useLocation();
 	const user = Cookies.get('user');
 	const [content, setContent] = useState('');
+    const tok = Cookies.get('token');
 
 	const getTime = (time) => {
 		const dateObject = new Date(time);
@@ -405,14 +406,10 @@ function Post({ post_id }) {
 			{!isOnMainPage && !isOnFavoritePage && (
 				<Comments post_id={postData.post_id} />
 			)}
-			{!isOnPostPage ? (
+			{!isOnPostPage && tok ? (
 				<button onClick={onPostClick}>look post</button>
 			) : null}
-			{isOnMainPage ||
-			isOnPostPage ||
-			(!isOnFavoritePage && !isOnUserPage) ? (
-				<button onClick={handleToggleFavorite}>Fav</button>
-			) : null}
+			
 			{isOnFavoritePage ? (
 				<button onClick={handleRemoveFromFavorites}>
 					Remove from favorites

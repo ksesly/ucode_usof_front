@@ -1,108 +1,164 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import '../../style/header.scss';
-import axios from 'axios';
-import Cookies from 'js-cookie';
-import Avatar from '../globalComponents/avatar';
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import "../../style/header.scss";
+import axios from "axios";
+import Cookies from "js-cookie";
+import Avatar from "../globalComponents/avatar";
 
 const Header = () => {
-	const [userData, setUserData] = useState({});
-	const [scrollDirection, setScrollDirection] = useState('scroll-up');
-	const navigate = useNavigate();
-	const tokenRef = useRef(null);
+    const [userData, setUserData] = useState({});
+    const [scrollDirection, setScrollDirection] = useState("scroll-up");
+    const navigate = useNavigate();
+    const tokenRef = useRef(null);
+    const tok = Cookies.get("token");
+    const refresh = () => window.location.reload(true);
+    const location = useLocation();
 
-	useEffect(() => {
-		const handleScroll = () => {
-			const currentScroll = window.pageYOffset;
-			if (currentScroll > lastScroll) {
-				setScrollDirection('scroll-down');
-			} else {
-				setScrollDirection('scroll-up');
-			}
-			lastScroll = currentScroll;
-		};
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScroll = window.pageYOffset;
+            if (currentScroll > lastScroll) {
+                setScrollDirection("scroll-down");
+            } else {
+                setScrollDirection("scroll-up");
+            }
+            lastScroll = currentScroll;
+        };
 
-		let lastScroll = window.pageYOffset;
-		window.addEventListener('scroll', handleScroll);
+        let lastScroll = window.pageYOffset;
+        window.addEventListener("scroll", handleScroll);
 
-		return () => {
-			window.removeEventListener('scroll', handleScroll);
-		};
-	}, []);
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, []);
 
-	useEffect(
-		() => {
-			const fetchUserData = async () => {
-				try {
-					tokenRef.current = Cookies.get('token');
-					const token = tokenRef.current;
+    const isOnUserPage = location.pathname.includes("user/me");
+    const isOnFavoritePage = location.pathname.includes("favorite");
 
-					if (token) {
-						// console.log('Token exists:', token);
-						const response = await axios.get(
-							'http://127.0.0.1:3050/api/users/currentUser',
-							{
-								headers: {
-									Authorization: `Bearer%20${token}`,
-								},
-							}
-						);
+    useEffect(
+        () => {
+            const fetchUserData = async () => {
+                try {
+                    tokenRef.current = Cookies.get("token");
+                    const token = tokenRef.current;
 
-						setUserData((prevUserData) => ({
-							...prevUserData,
-							...response.data,
-						}));
-						;
-					} else {
-						console.log('Token does not exist');
-					}
-				} catch (error) {
-					console.error('Error fetching user data:', error);
-				}
-			};
+                    if (token) {
+                        // console.log('Token exists:', token);
+                        const response = await axios.get(
+                            "http://127.0.0.1:3050/api/users/currentUser",
+                            {
+                                headers: {
+                                    Authorization: `Bearer%20${token}`,
+                                },
+                            }
+                        );
 
-			fetchUserData();
-		},
-		[
-			// userData
-		]
-	);
+                        setUserData((prevUserData) => ({
+                            ...prevUserData,
+                            ...response.data,
+                        }));
+                    } else {
+                        console.log("Token does not exist");
+                    }
+                } catch (error) {
+                    console.error("Error fetching user data:", error);
+                }
+            };
 
-	// console.log(userData)
-	const handleUserImage = async (ev) => {
-		ev.preventDefault();
+            fetchUserData();
+        },
+        [
+            // userData
+        ]
+    );
 
-		if (tokenRef.current) {
-			navigate(`/user/me`);
-		} else {
-			navigate('/notAuthOrReg');
-		}
-	};
+    // console.log(userData)
+    const handleUserImage = async (ev) => {
+        ev.preventDefault();
 
-	const goToMainPage =  async (ev) => {
-		ev.preventDefault();
-		navigate(`/mainPage`);
-	}
+        if (tokenRef.current) {
+            navigate(`/user/me`);
+        } else {
+            navigate("/notAuthOrReg");
+        }
+    };
 
-	return (
-		<div className={`header ${scrollDirection}`}>
-			<div className="header-field logo" onClick={goToMainPage}>for name and camp photo</div>
-			<div className="right-part-header">
-				<div className="header-field search-bar">for find bar</div>
-				<div className="header-field avatar-login">
-					<div className="header-login">
-						{userData.login ? userData.login : 'guest'}
-					</div>
-					<div onClick={handleUserImage}>
-						<Avatar
-							profilePicture={userData.profilePicture}
-							altText="User Avatar"
-						/>
-					</div>
-				</div>
-			</div>
-		</div>
-	);
+    const goToMainPage = async (ev) => {
+        ev.preventDefault();
+        navigate(`/mainPage`);
+    };
+
+    const handleLogOut = async () => {
+        try {
+            tokenRef.current = Cookies.get("token");
+            const token = tokenRef.current;
+
+            if (token) {
+                console.log("Token exists:", token);
+                const response = await axios.post(
+                    "http://127.0.0.1:3050/api/auth/logout",
+                    {},
+                    {
+                        headers: {
+                            Authorization: `Bearer%20${token}`,
+                        },
+                    }
+                );
+                console.log(response);
+                refresh();
+                Cookies.remove("token");
+            } else {
+                console.log("Token does not exist");
+            }
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+        }
+    };
+
+    const handleFavClick = () => {
+        navigate("/favorites");
+    };
+
+    const goToAboutPage = () => {
+        navigate("/about");
+    };
+
+    return (
+        <div className={`header ${scrollDirection}`}>
+            <div className="header-field logo" onClick={goToMainPage}>
+                for name and camp photo
+            </div>
+            <button onClick={goToMainPage}>Main Page</button>
+            {tok ? <button onClick={handleFavClick}>fav</button> : null}
+            <button onClick={goToAboutPage}>About</button>
+            <div className="right-part-header">
+                {/* <div className="header-field search-bar">for find bar</div> */}
+                <div className="header-field avatar-login">
+                    <div className="header-login">
+                        {userData.login ? userData.login : "guest"}
+                    </div>
+                    <div onClick={handleUserImage}>
+                        <Avatar
+                            profilePicture={userData.profilePicture}
+                            altText="User Avatar"
+                        />
+                    </div>
+                    {tok ? (
+                        <button onClick={handleLogOut}>Log Out</button>
+                    ) : (
+                        <button
+                            onClick={() => {
+                                navigate("/login");
+                            }}
+                        >
+                            Log In
+                        </button>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
 };
 
 export default Header;

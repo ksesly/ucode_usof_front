@@ -30,14 +30,12 @@ const MainPage = () => {
 		setCurrentPage(newPage);
 	};
 	// console.log(postData);
-	const handleFavClick = () => {
-		navigate('/favorites')
-	}
+	
 
 	return (
 		<div className="mainPage">
 			<Header />
-			<button onClick={handleFavClick}>fav</button>
+			
 			{postData.data
 				? postData.data.map((post) => (
 						<Post key={post.post_id} post_id={post.post_id} />
